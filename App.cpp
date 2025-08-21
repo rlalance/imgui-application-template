@@ -1,6 +1,13 @@
 ﻿#include "App.h"
 #include "imgui/imgui.h"
 
+void App::Draw()
+{
+    DrawMainMenuBar();
+    DrawAboutWindow();
+    DrawComponents();
+}
+
 void App::DrawAboutWindow()
 {
     if (mShowAbout)
@@ -42,8 +49,13 @@ void App::DrawMainMenuBar()
     }
 }
 
-void App::draw()
+void App::DrawComponents()
 {
-    DrawMainMenuBar();
-    DrawAboutWindow();
+    for (auto& [name, window] : mComponents)
+    {
+        if (window)
+        {
+            window->Draw();
+        }
+    }
 }

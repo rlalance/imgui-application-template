@@ -1,17 +1,20 @@
 ﻿#include "App.h"
 #include "imgui.h"
 #include "ImGuiManager.h"
-#include "IUIComponent.h"
+#include "AbstractUIComponent.h"
 
 // Example component that implements IUIComponent
-class MainWindowComponent : public IUIComponent
+class MainWindowComponent : public AbstractUIComponent
 {
 public:
     void Draw() override
     {
-        ImGui::Begin("Main Window");
-        ImGui::Text("Main Window Component Example");
-        ImGui::End();
+        if (mVisible)
+        {
+            ImGui::Begin("Main Window", &mVisible, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoCollapse);
+            ImGui::Text("Main Window Component Example");
+            ImGui::End();
+        }
     }
 };
 

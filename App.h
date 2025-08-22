@@ -1,5 +1,5 @@
 ﻿#pragma once
-#include "IUIComponent.h"
+#include "AbstractUIComponent.h"
 
 #include <map>
 #include <memory>
@@ -15,7 +15,7 @@ public:
 
     [[nodiscard]] bool shouldExit() const { return mExit; }
 
-    void AddComponent(const std::string& name, std::unique_ptr<IUIComponent> component)
+    void AddComponent(const std::string& name, std::unique_ptr<AbstractUIComponent> component)
     {
         mComponents[name] = std::move(component);
     }
@@ -27,7 +27,7 @@ public:
 
 private:
     virtual void DrawComponents();
-    std::pmr::map<std::string, std::unique_ptr<IUIComponent>> mComponents;
+    std::pmr::map<std::string, std::unique_ptr<AbstractUIComponent>> mComponents;
 
     bool mShowAbout = false;
     bool mExit = false;

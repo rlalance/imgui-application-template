@@ -21,7 +21,7 @@ set(SOURCES
         ImGuiManager.cpp
         ImGuiManager.h
         main.cpp
-        IUIComponent.h)
+        AbstractUIComponent.h)
 
 add_executable(imgui_application
         ${SOURCES}

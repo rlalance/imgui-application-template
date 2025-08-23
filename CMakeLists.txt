@@ -21,7 +21,11 @@ set(SOURCES
         ImGuiManager.cpp
         ImGuiManager.h
         main.cpp
-        AbstractUIComponent.h)
+        AbstractUIComponent.h
+        Multithreading/AsyncTaskManager.cpp
+        Multithreading/AsyncTaskManager.h
+        Multithreading/Examples/MultithreadingExamples.cpp
+        Multithreading/Examples/MultithreadingExamples.h)
 
 add_executable(imgui_application
         ${SOURCES}

@@ -25,10 +25,12 @@ public:
         mComponents.erase(name);
     }
 
-private:
-    virtual void DrawComponents();
-    std::pmr::map<std::string, std::unique_ptr<AbstractUIComponent>> mComponents;
-
+protected:
     bool mShowAbout = false;
     bool mExit = false;
+    std::map<std::string, std::unique_ptr<AbstractUIComponent>> mComponents;
+
+private:
+    virtual void DrawComponents();
+
 };

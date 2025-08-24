@@ -16,22 +16,22 @@ set(IMGUI_SOURCES
 )
 
 set(SOURCES
-        App.cpp
-        App.h
-        ImGuiManager.cpp
-        ImGuiManager.h
+        Core/App.cpp
+        Core/App.h
+        Core/ImGuiManager.cpp
+        Core/ImGuiManager.h
         main.cpp
-        AbstractUIComponent.h
+        Core/AbstractUIComponent.h
         Multithreading/AsyncTaskManager.cpp
         Multithreading/AsyncTaskManager.h
         Multithreading/Examples/MultithreadingExamples.cpp
         Multithreading/Examples/MultithreadingExamples.h
         DungeonGenerator/DungeonGenerator.cpp
         DungeonGenerator/DungeonGenerator.h
-        MyApp.cpp
-        MyApp.h
-        MainWindowComponent.cpp
-        MainWindowComponent.h)
+        DungeonGenerator/MyApp.cpp
+        DungeonGenerator/MyApp.h
+        DungeonGenerator/MainWindowComponent.cpp
+        DungeonGenerator/MainWindowComponent.h)
 
 add_executable(imgui_application
         ${SOURCES}

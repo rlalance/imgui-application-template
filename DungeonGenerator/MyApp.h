@@ -1,10 +1,10 @@
 ﻿#pragma once
 
-#include "App.h"
-#include "ImGuiManager.h"
-#include "DungeonGenerator/DungeonGenerator.h"
+#include "../Core/App.h"
+#include "../Core/ImGuiManager.h"
+#include "DungeonGenerator.h"
 #include "MainWindowComponent.h"
-#include "Multithreading/AsyncTaskManager.h"
+#include "../Multithreading/AsyncTaskManager.h"
 
 class MyApp : public App
 {

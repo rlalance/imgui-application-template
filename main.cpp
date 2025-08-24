@@ -1,5 +1,5 @@
-﻿#include "ImGuiManager.h"
-#include "MyApp.h"
+﻿#include "Core/ImGuiManager.h"
+#include "DungeonGenerator/MyApp.h"
 
 int main()
 {

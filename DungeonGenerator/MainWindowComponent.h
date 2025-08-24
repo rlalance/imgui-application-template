@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "AbstractUIComponent.h"
+#include "../Core/AbstractUIComponent.h"
 #include "imgui.h"
 
 #include <functional>

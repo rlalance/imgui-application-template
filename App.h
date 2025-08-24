@@ -25,6 +25,11 @@ public:
         mComponents.erase(name);
     }
 
+    AbstractUIComponent& GetComponent(const std::string& name)
+    {
+        return *mComponents[name];
+    }
+
 protected:
     bool mShowAbout = false;
     bool mExit = false;

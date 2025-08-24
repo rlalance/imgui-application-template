@@ -25,7 +25,13 @@ set(SOURCES
         Multithreading/AsyncTaskManager.cpp
         Multithreading/AsyncTaskManager.h
         Multithreading/Examples/MultithreadingExamples.cpp
-        Multithreading/Examples/MultithreadingExamples.h)
+        Multithreading/Examples/MultithreadingExamples.h
+        DungeonGenerator/DungeonGenerator.cpp
+        DungeonGenerator/DungeonGenerator.h
+        MyApp.cpp
+        MyApp.h
+        MainWindowComponent.cpp
+        MainWindowComponent.h)
 
 add_executable(imgui_application
         ${SOURCES}

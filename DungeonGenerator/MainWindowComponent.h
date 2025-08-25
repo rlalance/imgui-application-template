@@ -1,7 +1,6 @@
 ﻿#pragma once
 
 #include "../Core/AbstractUIComponent.h"
-#include "imgui.h"
 
 #include <functional>
 
@@ -14,4 +13,7 @@ public:
     std::function<void()> onDungeonGenerationButtonClicked;
     std::function<void()> onDungeonGenerationStarted;
     std::function<void()> onDungeonGenerationCompleted;
+
+    int mGridSize;
+    int mTileSize;
 };

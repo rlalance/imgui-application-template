@@ -3,7 +3,7 @@
 
 int main()
 {
-    ImGuiManager imgui(1280, 800, L"Wave Collapse Based Dungeon Generator");
+    ImGuiManager imgui(1920, 1080, L"Wave Collapse Based Dungeon Generator");
     MyApp app;
 
     imgui.run([&]()

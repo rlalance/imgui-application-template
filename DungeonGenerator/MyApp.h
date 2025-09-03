@@ -1,8 +1,10 @@
 ﻿#pragma once
 
-#include "../Core/App.h"
+#include "AsyncTaskManager.h"
 #include "DungeonGenerator.h"
-#include "../Multithreading/AsyncTaskManager.h"
+
+#include <App.h>
+#include <CacheSystem/HugeObjectCache.h>
 
 class MyApp : public App
 {
@@ -12,11 +14,12 @@ public:
     void Draw() override;
     void DrawMainMenuBar() override;;
 
-    void SetTileSize(float size) { mTileSize = size; }
-    float GetTileSize() const { return mTileSize; }
+    void SetTileSize(int size) { mTileSize = size; }
+    int GetTileSize() const { return mTileSize; }
 
 private:
     AsyncTaskManager taskManager;
+    HugeObjectCache cacheSystem;
     bool dungeonGenerationRequested = false;
     std::unique_ptr<DungeonGenerator> generator;
     bool mShowActivityIndicator = false;

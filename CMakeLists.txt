@@ -31,7 +31,13 @@ set(SOURCES
         DungeonGenerator/MyApp.cpp
         DungeonGenerator/MyApp.h
         DungeonGenerator/MainWindowComponent.cpp
-        DungeonGenerator/MainWindowComponent.h)
+        DungeonGenerator/MainWindowComponent.h
+        Core/CacheSystem/HugeObjectCache.cpp
+        Core/CacheSystem/HugeObjectCache.h
+        Core/CacheSystem/CacheItemPolicy.cpp
+        Core/CacheSystem/CacheItemPolicy.h
+        Core/CacheSystem/CacheItem.cpp
+        Core/CacheSystem/CacheItem.h)
 
 add_executable(imgui_application
         ${SOURCES}
@@ -40,7 +46,12 @@ add_executable(imgui_application
 target_include_directories(imgui_application PRIVATE
         ${IMGUI_DIR}
         ${IMGUI_DIR}/backends
+        ${CMAKE_SOURCE_DIR}/Core
+        ${CMAKE_SOURCE_DIR}/Core/CacheSystem
+        ${CMAKE_SOURCE_DIR}/Multithreading
+        ${CMAKE_SOURCE_DIR}/DungeonGenerator
 )
+
 
 target_link_libraries(imgui_application
         d3d11
@@ -50,3 +61,27 @@ target_link_libraries(imgui_application
         user32
         dwmapi
 )
+
+include(FetchContent)
+FetchContent_Declare(
+        googletest
+        URL https://github.com/google/googletest/archive/refs/tags/v1.14.0.zip
+)
+FetchContent_MakeAvailable(googletest)
+
+add_executable(my_tests tests/test_cache.cpp)
+
+target_include_directories(my_tests PRIVATE
+        ${CMAKE_SOURCE_DIR}/Core
+        ${CMAKE_SOURCE_DIR}/Core/CacheSystem
+        ${CMAKE_SOURCE_DIR}/Multithreading
+        ${CMAKE_SOURCE_DIR}/DungeonGenerator
+        ${IMGUI_DIR}
+        ${IMGUI_DIR}/backends
+)
+
+target_link_libraries(my_tests PRIVATE gtest_main)
+add_test(NAME MyCacheTests COMMAND my_tests)
+
+# Enable CTest
+enable_testing()

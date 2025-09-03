@@ -3,7 +3,7 @@
 #include "imgui.h"
 #include "MainWindowComponent.h"
 
-MyApp::MyApp() : mGridSize(100), mTileSize(20.0f)
+MyApp::MyApp() : cacheSystem(512), mGridSize(100), mTileSize(20.0f)
 {
     generator = std::make_unique<DungeonGenerator>(mGridSize, mGridSize);
 
@@ -12,20 +12,11 @@ MyApp::MyApp() : mGridSize(100), mTileSize(20.0f)
     mainWindowComponent->mGridSize = mGridSize;
     mainWindowComponent->mTileSize = mTileSize;
 
-    mainWindowComponent->onDungeonGenerationButtonClicked = [&]()
-    {
-        dungeonGenerationRequested = true;
-    };
+    mainWindowComponent->onDungeonGenerationButtonClicked = [&]() { dungeonGenerationRequested = true; };
 
-    mainWindowComponent->onDungeonGenerationStarted = [&]()
-    {
-        mShowActivityIndicator = true;
-    };
+    mainWindowComponent->onDungeonGenerationStarted = [&]() { mShowActivityIndicator = true; };
 
-    mainWindowComponent->onDungeonGenerationCompleted = [&]()
-    {
-        mShowActivityIndicator = false;
-    };
+    mainWindowComponent->onDungeonGenerationCompleted = [&]() { mShowActivityIndicator = false; };
 
     AddComponent("Main", std::move(mainWindowComponent));
 }

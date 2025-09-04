@@ -69,7 +69,7 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(googletest)
 
-add_executable(my_tests tests/test_cache.cpp)
+add_executable(my_tests Tests/CacheItemTests.cpp)
 
 target_include_directories(my_tests PRIVATE
         ${CMAKE_SOURCE_DIR}/Core

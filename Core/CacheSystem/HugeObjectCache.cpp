@@ -22,6 +22,17 @@ void HugeObjectCache::AddItem(const EvictionPolicy &policy, const std::string &k
 
 std::shared_ptr<CacheItem> HugeObjectCache::GetItem(const std::string &key)
 {
+    auto it = mCacheItems.find(key);
+
+    if (it != mCacheItems.end())
+    {
+        if (it->second->GetEvictionPolicy() == EvictionPolicy::SlidingExpiration)
+        {
+            it->second->mLifetimeElapsed = std::chrono::high_resolution_clock::duration::zero();
+        }
+        return it->second;
+    }
+
     return mCacheItems[key];
 }
 
@@ -44,37 +55,23 @@ void HugeObjectCache::RefreshCacheItems()
     mTileElapsed = now - mLastUpdateTime;
     mLastUpdateTime = now;
 
-    for (const auto& [key,item] : mCacheItems)
+    for (const auto &[key, item] : mCacheItems)
     {
         item->mLifetimeElapsed += mTileElapsed;
 
         MarkItemsToEvict(key, item);
     }
 
-    for (const auto& key : mKeysToEvict)
+    for (const auto &key : mKeysToEvict)
     {
         mCacheItems.erase(key);
     }
 }
 
-void HugeObjectCache::MarkItemsToEvict(const std::string &key, const std::shared_ptr<CacheItem>& item)
+void HugeObjectCache::MarkItemsToEvict(const std::string &key, const std::shared_ptr<CacheItem> &item)
 {
-    if (item->GetEvictionPolicy() == EvictionPolicy::AbsoluteExpiration)
+    if (item->mLifetimeElapsed >= item->mLifetime)
     {
-        if (item->mLifetimeElapsed >= item->mLifetime)
-        {
-            // Evict the item
-            // Note: Actual eviction logic (like removing from mCacheItems) should be handled here
-            mKeysToEvict.insert(key);
-        }
-    }
-    else if (item->GetEvictionPolicy() == EvictionPolicy::SlidingExpiration)
-    {
-    }
-    else if (item->GetEvictionPolicy() == EvictionPolicy::SizeBased)
-    {
-    }
-    else if (item->GetEvictionPolicy() == EvictionPolicy::PriorityBased)
-    {
+        mKeysToEvict.insert(key);
     }
 }

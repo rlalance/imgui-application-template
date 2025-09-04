@@ -8,7 +8,7 @@
 
 TEST(CacheItemTest, StoresAndRetrievesInt)
 {
-    CacheItem item(42);
+    CacheItem item(std::chrono::seconds(0), 42);
 
     EXPECT_TRUE(item.Is<int>());
     EXPECT_EQ(item.GetDataAs<int>(), 42);
@@ -16,7 +16,7 @@ TEST(CacheItemTest, StoresAndRetrievesInt)
 
 TEST(CacheItemTest, StoresAndRetrievesString)
 {
-    CacheItem item(std::string("Hello"));
+    CacheItem item(std::chrono::seconds(0), std::string("Hello"));
 
     EXPECT_TRUE(item.Is<std::string>());
     EXPECT_EQ(item.GetDataAs<std::string>(), "Hello");
@@ -24,13 +24,13 @@ TEST(CacheItemTest, StoresAndRetrievesString)
 
 TEST(CacheItemTest, IsReturnsFalseForWrongType)
 {
-    CacheItem item(100);
+    CacheItem item(std::chrono::seconds(0), 100);
     EXPECT_FALSE(item.Is<std::string>());
 }
 
 TEST(CacheItemTest, CanCacheRawPointer)
 {
-    CacheItem item(new int[50000]); // Allocate a large array
+    CacheItem item(std::chrono::seconds(0), new int[50000]); // Allocate a large array
     EXPECT_TRUE(item.Is<int*>());
     delete[] item.GetDataAs<int*>(); // Clean up
 }
@@ -38,7 +38,7 @@ TEST(CacheItemTest, CanCacheRawPointer)
 TEST(CacheItemTest, CanCachePointer)
 {
     auto ptr = std::make_shared<int>(123);
-    CacheItem item(ptr);
+    CacheItem item(std::chrono::seconds(0), ptr);
 
     EXPECT_TRUE(item.Is<std::shared_ptr<int>>());
     EXPECT_EQ(*item.GetDataAs<std::shared_ptr<int>>(), 123);

@@ -1,6 +1,6 @@
 ﻿#include "CacheItem.h"
 
-void CacheItem::SetPolicy(const CacheItemPolicy &policy)
+void CacheItem::SetEvictionPolicy(const EvictionPolicy &evictionPolicy)
 {
-
+    mEvictionPolicy = evictionPolicy;
 }

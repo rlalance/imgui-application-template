@@ -1,49 +1,55 @@
 ﻿#include "MyApp.h"
 
-#include "imgui.h"
+#include "CacheItem.h"
+#include "CacheItemPolicy.h"
 #include "MainWindowComponent.h"
+#include "imgui.h"
 
-MyApp::MyApp() : cacheSystem(512), mGridSize(100), mTileSize(20.0f)
+MyApp::MyApp() : mCacheSystem(512), mGridSize(100), mTileSize(20.0f)
 {
-    generator = std::make_unique<DungeonGenerator>(mGridSize, mGridSize);
+    mGenerator = std::make_unique<DungeonGenerator>(mGridSize, mGridSize);
 
     auto mainWindowComponent = std::make_unique<MainWindowComponent>();
 
     mainWindowComponent->mGridSize = mGridSize;
     mainWindowComponent->mTileSize = mTileSize;
 
-    mainWindowComponent->onDungeonGenerationButtonClicked = [&]() { dungeonGenerationRequested = true; };
-
+    mainWindowComponent->onDungeonGenerationButtonClicked = [&]() { mDungeonGenerationRequested = true; };
     mainWindowComponent->onDungeonGenerationStarted = [&]() { mShowActivityIndicator = true; };
-
     mainWindowComponent->onDungeonGenerationCompleted = [&]() { mShowActivityIndicator = false; };
 
     AddComponent("Main", std::move(mainWindowComponent));
+
+    mCacheSystem.AddItem(EvictionPolicy::AbsoluteExpiration, "ExampleItem", std::make_unique<CacheItem>(std::chrono::seconds(60), std::string("This is a cached string")));
+}
+
+void MyApp::Update()
+{
+    mCacheSystem.Update();
 }
 
 void MyApp::Draw()
 {
     App::Draw();
 
-    auto mainWindowComponent = dynamic_cast<MainWindowComponent&>(GetComponent("Main"));
+    auto mainWindowComponent = dynamic_cast<MainWindowComponent &>(GetComponent("Main"));
 
     if (mGridSize != mainWindowComponent.mGridSize)
     {
         mGridSize = mainWindowComponent.mGridSize;
-        generator = std::make_unique<DungeonGenerator>(mGridSize, mGridSize);
+        mGenerator = std::make_unique<DungeonGenerator>(mGridSize, mGridSize);
     }
 
     mTileSize = mainWindowComponent.mTileSize;
 
-    if (dungeonGenerationRequested)
+    if (mDungeonGenerationRequested)
     {
-        dungeonGenerationRequested = false;
-        auto future = taskManager.submitTask([&]()
-        {
-            auto mainWindow = dynamic_cast<MainWindowComponent&>(GetComponent("Main"));
+        mDungeonGenerationRequested = false;
+        auto future = mTaskManager.submitTask([&]() {
+            auto mainWindow = dynamic_cast<MainWindowComponent &>(GetComponent("Main"));
 
             mainWindow.onDungeonGenerationStarted();
-            generator->GenerateDungeon();
+            mGenerator->GenerateDungeon();
             mainWindow.onDungeonGenerationCompleted();
         });
     }
@@ -53,7 +59,7 @@ void MyApp::Draw()
 
 void MyApp::DrawDungeonGrid() const
 {
-    const auto& grid = generator->GetGrid();
+    const auto &grid = mGenerator->GetGrid();
     ImGui::Begin("Dungeon Grid");
     const ImVec2 spacing = {1, 1};
     ImVec2 cursor = ImGui::GetCursorScreenPos();
@@ -87,8 +93,7 @@ void MyApp::DrawDungeonGrid() const
                 ImVec2(cursor.x + x * (mTileSize + spacing.x), cursor.y + y * (mTileSize + spacing.y)),
                 ImVec2(cursor.x + x * (mTileSize + spacing.x) + mTileSize,
                        cursor.y + y * (mTileSize + spacing.y) + mTileSize),
-                tileColor
-            );
+                tileColor);
         }
     }
 

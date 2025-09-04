@@ -3,27 +3,38 @@
 #include "CacheItemPolicy.h"
 
 #include <any>
+#include <chrono>
 
 class CacheItem
 {
-public:
+  public:
     template <typename T>
-    explicit CacheItem(T data) : mData(std::move(data)) {}
+    explicit CacheItem(std::chrono::high_resolution_clock::duration lifetime, T data)
+        : mLifetime(lifetime), mData(std::move(data))
+    {
+    }
 
-    template <typename T>
-    T GetDataAs() const { return std::any_cast<T>(mData); }
+    template <typename T> T GetDataAs() const
+    {
+        return std::any_cast<T>(mData);
+    }
 
-    void SetPolicy(const CacheItemPolicy &policy);
-    const CacheItemPolicy &GetPolicy() const { return policy; }
+    void SetEvictionPolicy(const EvictionPolicy &evictionPolicy);
+    EvictionPolicy GetEvictionPolicy() const
+    {
+        return mEvictionPolicy;
+    }
 
-    template<typename T>
-    bool Is() const noexcept
+    template <typename T> bool Is() const noexcept
     {
         return std::any_cast<T>(&mData) != nullptr;
     }
 
+    std::chrono::high_resolution_clock::duration mLifetimeElapsed =
+        std::chrono::high_resolution_clock::duration::zero();
+    std::chrono::high_resolution_clock::duration mLifetime; // Default 30 seconds
 
-private:
-    CacheItemPolicy policy;
+  private:
+    EvictionPolicy mEvictionPolicy = EvictionPolicy::None;
     std::any mData;
 };

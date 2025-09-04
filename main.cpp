@@ -8,6 +8,7 @@ int main()
 
     imgui.run([&]()
     {
+        app.Update();
         app.Draw();
     });
 
